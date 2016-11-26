@@ -1,0 +1,202 @@
+class DoubleLinkedlist:
+    class Node:
+        def __init__(self, initdata):
+            self.data = initdata
+            self.next = None
+            self.prev = None
+
+        def getData(self):
+            return self.data
+
+        def getNext(self):
+            return self.next
+
+        def getPrev(self):
+            return self.prev
+
+        def setData(self, newdata):
+            self.data = newdata
+
+        def setNext(self, newnext):
+            self.next = newnext
+
+        def setPrev(self, newprev):
+            self.prev = newprev
+
+    def __init__(self):
+        self.head = None
+        self.last = None
+        self.N = 0
+
+    def is_empty(self):
+        return self.head == None
+
+    def push(self, x):
+        temp = self.Node(x)
+        if self.head == None:
+            self.head = temp
+            self.last = temp
+        else:
+            temp2 = self.head
+            temp.setNext(self.head)
+            self.head = temp
+            temp2.setPrev(temp)
+        self.N += 1
+
+    def append(self, x):  # add at the end of the list
+        temp = self.Node(x)
+        if self.head == None:
+            self.head = temp
+            self.last = temp
+        else:
+            temp2 = self.last
+            temp.setPrev(self.last)
+            self.last = temp
+            temp2.setNext(temp)
+        self.N += 1
+
+    def __len__(self):
+        return self.size()
+
+    def size(self):
+        return self.N
+
+    def search(self, item):  # returns (don't remove) item from the list
+        current = self.head
+        found = False
+        while current != None and not found:
+            if current.getData() == item:
+                found = True
+            else:
+                current = current.getNext()
+        return found
+
+    def __getitem__(self, index):
+        return self.get(index)
+
+    def __setitem__(self, i, v):
+        return self.update(v, i)
+
+    def get(self, i=0):  # returns item with index i
+        current = self.head
+        found = False
+        cnt = 0
+        while not cnt > i and not found:
+            if cnt == i:
+                found = True
+            else:
+                current = current.getNext()
+                cnt += 1
+        return current.getData()
+
+    def update(self, new_item, i):  # takes index and new item and update list element
+        current = self.head
+        cnt = 0
+        found = False
+        while not found:
+            if cnt == i:
+                current.setData(new_item)
+                found = True
+            else:
+                current = current.getNext()
+                cnt += 1
+
+    def index(self, item):  # return first item index  in  the list
+        current = self.head
+        found = False
+        cnt = 0
+        while current != None and not found:
+            if current.getData() == item:
+                found = True
+            else:
+                cnt += 1
+                current = current.getNext()
+        return cnt
+
+    def slice(self, start, stop):  # create a python style slice
+        tempList = DoubleLinkedlist()
+        current = self.head
+        cnt = 0
+        while cnt != start:
+            cnt += 1
+            current = current.getNext()
+        while cnt < stop:
+            t = current.getData()
+            tempList.append(t)
+            cnt += 1
+            current = current.getNext()
+        return tempList
+
+    def remove(self, item):  # delete the first occurence of an item
+        current = self.head
+        previous = None
+        found = False
+        while not found:
+            if current.getData() == item:
+                found = True
+            else:
+                previous = current
+                current = current.getNext()
+
+        if previous == None:
+            self.head = current.getNext()
+        else:
+
+            current.setPrev(current.getPrev)
+            previous.setNext(current.getNext())
+        self.N -= 1
+
+    def pop(self, i=0):
+        current = self.head
+        previous = None
+        found = False
+        cnt = 0
+        while not found:
+            if cnt == i:
+                found = True
+            else:
+                previous = current
+                current = current.getNext()
+            cnt += 1
+        if previous == None:
+            self.head = current.getNext()
+        else:
+
+            current.setPrev(current.getPrev)
+            previous.setNext(current.getNext())
+        self.N -= 1
+
+    def __str__(self):  # enables print(list)
+        if self.head != None:
+            current = self.head
+            out = '[' + str(current.getData())
+            while current.getNext() != None:
+                current = current.getNext()
+                out += ', ' + str(current.getData())
+            return out + ']'
+        return '[]'
+
+    def __add__(self, list_item):  # magic method enables concat: l1 + l2
+        self.last.setNext(list_item.head)
+        list_item.head.setPrev(self.last)
+        self.last = list_item.last
+        self.N += list_item.size()
+
+    def iterate(self):  # returns iterator over the list
+        current = self.head
+        while current != None:
+            yield current
+            current = current.getNext()
+
+    def __eq__(self, other):  # defines equality, enables to use == as a value equality
+        if self.size() != other.size():
+            return False
+        current = self.head
+        current2 = other.head
+        while current != None:
+            if current.getData() != current2.getData():
+                return False
+            else:
+                current = current.getNext()
+                current2 = current2.getNext()
+        return True
