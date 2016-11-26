@@ -1,3 +1,7 @@
+# Unrolled linked List Python
+# https://en.wikipedia.org/wiki/Unrolled_linked_list
+
+
 class UnrolledLinkedList:
     """Linked list, with arrays as data value fields."""
 
