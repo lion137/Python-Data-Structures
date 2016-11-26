@@ -1,0 +1,160 @@
+class UnrolledLinkedList:
+    """Linked list, with arrays as data value fields."""
+
+    class Node:
+        def __init__(self, max_elements):
+            self.data = max_elements * [None]
+            self.next = None
+            self.prev = None
+            self.non_zero = len(self.data)
+            self.index = 0
+
+        def getData(self, i=-2):
+            if i == -2:
+                return self.data
+            else:
+                return self.data[i]
+
+        def getNext(self):
+            return self.next
+
+        def getPrev(self):
+            return self.prev
+
+        def setData(self, arg):
+            """Set new available None element of the data array to
+            arg."""
+            self.data[self.non_zero - 1] = arg
+            self.non_zero -= 1
+
+        def updateData(self, elem, i):
+            """Updates the i-th data array element to elem """
+            self.data[i] = elem
+
+        def setNext(self, newnext):
+            self.next = newnext
+
+        def setPrev(self, newprev):
+            self.prev = newprev
+        def setIndex(self, i):
+            self.index = i
+        def getIndex(self):
+            return self.index
+
+    # end of internal class Node code
+
+    def __init__(self, max_el):
+        self.max_elements = max_el
+        self.head = None
+        self.last = None
+        self.N = 0
+
+    def is_empty(self):
+        return self.head == None
+
+    def __len__(self):  # enables use len(list_object)
+        return self.size()
+
+    def __setitem__(self, i, v): # enables set list[i] = elem
+        return self.update(v, i)
+
+    def __str__(self):  # enables print(list_object)
+        if self.head != None:
+            current = self.head
+            tmp = str(current.getData())
+            tmp_out = tmp.replace('[', '').replace(']', '').replace('None, ', '')
+            out = '[' + tmp_out
+            while current.getNext() != None:
+                current = current.getNext()
+                tmp1 = str(current.getData())
+                tmp1_out = tmp1.replace('[', '').replace(']', '').replace('None, ', '')
+                out += ', ' + tmp1_out
+            return out + ']'
+        return '[]'
+
+    def size(self):
+        return self.N
+
+    def push(self, arg):
+        """Push an argument on the front of the list"""
+        if self.head:
+            if self.head.non_zero > 0:
+                self.head.setData(arg)
+            else:  # this part is similar to normal linked list
+                in1 = self.head.getIndex() + 1
+                temp = self.Node(self.max_elements)
+                temp.setIndex(in1)
+                temp.setData(arg)
+                if self.head == None:
+                    self.head = temp
+                    self.last = temp
+                else:
+                    temp2 = self.head
+                    temp.setNext(self.head)
+                    self.head = temp
+                    temp2.setPrev(temp)
+
+        else:  # this too
+            temp = self.Node(self.max_elements)
+            temp.setIndex(0)
+            temp.setData(arg)
+            if self.head == None:
+                self.head = temp
+                self.last = temp
+            else:
+                temp2 = self.head
+                temp.setNext(self.head)
+                self.head = temp
+                temp2.setPrev(temp)
+        self.N += 1  # increase length
+
+    def pop(self):
+        """Remove the first element from the list,
+        raise exception if applied to empty list."""
+        if self.is_empty():
+            raise Exception("Empty list")
+        else:
+            if not self.head.data[self.max_elements - 2]:
+                if self.head.next is None:
+                    del self.head.data  # is it necessary?
+                    self.head = None
+                else:
+                    current = self.head
+                    current.next.prev = None
+                    self.head = current.getNext()
+            else:
+                self.head.data[self.head.non_zero] = None
+                self.head.non_zero += 1
+        self.N -= 1
+
+
+    def peek(self, i=0):
+        """ Returns (not remove) an item with the index i,
+        returns head if index not supplied, returns None if list is empty."""
+        if self.is_empty():
+            return None
+        else:
+            if i >= self.size() or i < 0:
+                return "Index Out Of Bounds"
+            k = (self.size() - 1) - i
+            cnt = 1
+            cur = self.last
+            while k >= cnt * self.max_elements:
+                cnt += 1
+                cur = cur.getPrev()
+            return  cur.data[(self.max_elements - 1) - k % self.max_elements]
+
+
+    def update(self,elem, i):
+        """Updates the i-th list element to elem."""
+        if self.is_empty():
+            raise Exception("Empty list!")
+        if i >= self.size() or i < 0:
+            raise Exception("Index Out Of Bounds")
+        k = (self.size() - 1) - i
+        cnt = 1
+        cur = self.last
+        while k >= cnt * self.max_elements:
+            cnt += 1
+            cur = cur.getPrev()
+        cur.data[(self.max_elements - 1) - k % self.max_elements] = elem
