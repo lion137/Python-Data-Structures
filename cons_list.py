@@ -120,6 +120,13 @@ def Create_list(args):
             return Cons(xs[cnt], helper(xs, cnt + 1, limit))
     return helper(args, 0, tmp)
 
+def Create_from_list(elem = None, lst = None):
+    if elem is not None:
+        return Cons(elem, lst)
+    else:
+        return Nil()
+
+
 def duplicate(n, xs):
     """return n duplicates n times expression xs"""
     if n == 0:
