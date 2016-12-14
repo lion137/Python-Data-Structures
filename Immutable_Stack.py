@@ -25,8 +25,13 @@ class Stack:
             return '()'
         else:
             return self.stack.__str__()
-        
+'''        
 s1 = Stack()
 s2 = s1.push(1)
 print(s2.is_empty())
 print(s2)
+
+outcome -> 
+False
+(1)
+'''
