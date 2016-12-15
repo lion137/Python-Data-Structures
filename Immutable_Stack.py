@@ -1,8 +1,7 @@
-# Immutable stack interface based on Immutable lists (from this repo) 
 class Stack:
     
     def __init__(self, elem = None, lst = None):
-        if elem is not None:
+        if lst is not None:
             self.stack = Create_from_list(elem, lst)
         else:
             self.stack = Create_list([])
@@ -12,7 +11,10 @@ class Stack:
         
         
     def pop(self):
-        return remove_nth(0, self.stack) 
+        if self.stack.tail is not Nil:
+            return Stack(nth(1, self.stack), lself.stack.tail.tail)
+        else:
+            return Nil()
     
     def is_empty(self):
         return empty(self.stack)
