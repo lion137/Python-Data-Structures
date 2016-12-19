@@ -294,6 +294,7 @@ def top_height(tree_node):
         return 1 + top_height(tree_node.parent)
 
 def make_list(tree_node):
+    """ make a list from a bin tree"""
     if not tree_node:
         return []
     else:
@@ -310,55 +311,4 @@ def make_list(tree_node):
             print(l[x])
 
 
-tr1 = Binary_search_tree()
-tr1.put(2, "a")
-tr1.put(1, "b")
-tr1[4] = "c"
-tr1[4] = "d"
-print(inorder_traversal(tr1))
 
-tr1.delete(4)
-print(inorder_traversal(tr1))
-del(tr1[1])
-print(inorder_traversal(tr1))
-print("------------")
-tr2 = Binary_search_tree()
-tr2[1] = 1
-tr2[45] = "a"
-tr2[3] = {}
-print(inorder_traversal(tr2))
-
-
-print("--------------------------------")
-
-
-tree = Binary_search_tree()
-l1 = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 18, 19, 22, 123, 200, 201]
-print(len(l1))
-make_min_from_array(tree, l1)
-inorder_traversal(tree)
-print(height(tree.root))
-print("max depth ", maxdepth(tree.root))
-print("min depth ", mindepth(tree.root))
-print("is balanced? ", is_balanced(tree))
-print("is balanced2? ", is_balanced2(tree))
-mytree1 = Binary_search_tree()
-mytree1[9] = "first"
-mytree1[8] = "second"
-mytree1[7] = "third"
-mytree1[6] = "fourth"
-mytree1[11] = "fivth"
-mytree1[4] = "sixth"
-mytree1[3] = "seventh"
-mytree1[2] = "eighth"
-mytree1[1] = "nineth"
-mytree1[0] = "tenth"
-mytree1[-1] = "eleventh"
-mytree1[23] = "nineth"
-mytree1[34] = "nineth"
-mytree1[-9] = "nineth"
-mytree1[-3] = "nineth"
-print("is bal tree2? ", is_balanced2(mytree1))
-print("is bal tree2? ", is_balanced(mytree1))
-print("height node left ", height_node(mytree1.root.leftChild))
-make_list(mytree1)
