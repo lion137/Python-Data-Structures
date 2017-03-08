@@ -66,27 +66,27 @@ class Bin_heap:
             else:
                 return i * 2 + 1
 
-
-h1 = Bin_heap()
-h1.build_heap([8, 23, 5, 6, 77, 1, -98])
-print(h1)
-print(h1.find_min())
-print(h1)
-h1.del_min()
-print(h1)
-h1.insert(-909)
-print(h1)
-print(len(h1))
-'''
-output ->
-[-98, 6, 1, 23, 77, 8, 5]
-None
--98
-[-98, 6, 1, 23, 77, 8, 5]
-None
-[1, 6, 5, 23, 77, 8]
-None
-[-909, 6, 1, 23, 77, 8, 5]
-None
-7
-'''
+if __name__ == "__main__":
+    h1 = Bin_heap()
+    h1.build_heap([8, 23, 5, 6, 77, 1, -98])
+    print(h1)
+    print(h1.find_min())
+    print(h1)
+    h1.del_min()
+    print(h1)
+    h1.insert(-909)
+    print(h1)
+    print(len(h1))
+    '''
+    output ->
+    [-98, 6, 1, 23, 77, 8, 5]
+    None
+    -98
+    [-98, 6, 1, 23, 77, 8, 5]
+    None
+    [1, 6, 5, 23, 77, 8]
+    None
+    [-909, 6, 1, 23, 77, 8, 5]
+    None
+    7
+    '''
