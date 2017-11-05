@@ -67,7 +67,7 @@ def concat(xs, ys):
 def nth(n , xs):
     """Returns nt-h (0 based indexing) elemt of the list, 
     throws an exception when out of range"""
-    if xs is Nil:
+    if empty(xs):
         return Exception("Out Of Bound")
     if n == 0:
         return xs.head
