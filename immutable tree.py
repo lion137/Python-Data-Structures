@@ -33,17 +33,17 @@ class Binary_tree:
 class Tree(metaclass=ABCMeta):
     
     @abstractmethod
-    def is_empty():
+    def is_empty(self):
         pass
-    def item():
+    def item(self):
         pass
-    def left():
+    def left(self):
         pass
-    def right():
+    def right(self):
         pass
     
-List.register(Nil_tree);
-List.register(Binary_tree)
+Tree.register(Nil_tree);
+Tree.register(Binary_tree)
 
 # few tree methods:
 def inorder(tree):
