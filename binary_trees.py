@@ -1,5 +1,5 @@
 # binary tree
-import Stacks as st
+import Stack as st
 def preorder_traversal(tree):
     if tree:
         print(tree.getRootVal())
