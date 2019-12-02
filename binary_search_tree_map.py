@@ -1,5 +1,5 @@
 # map (symbol table) implementation using binary search tree
-
+import random
 
 
 class Binary_search_tree:
@@ -71,7 +71,7 @@ class Binary_search_tree:
             else:
                 current.parent.rightChild = None
         elif current.hasBothChildren():  # is interior in a tree
-            next_node = current.find_next()
+            next_node = current._find_next()
             next_node._splice()
             current.key = next_node.key
             current.payload = next_node.payload
@@ -101,45 +101,6 @@ class Binary_search_tree:
                                             current.rightChild.leftChild,
                                             current.rightChild.rightChild)
 
-    def _find_next(self):
-        res = None
-        if self.hasRightChild():
-            res = self.rightChild._find_min()
-        else:
-            if self.parent:
-                if self.isLeftChild():
-                    res = self.parent
-                else:
-                    self.parent.rightChild = None
-                    res = self.parent._find_next()
-                    self.parent.rightChild = self
-        return res
-
-    def _find_min(self):
-        current = self
-        while current.hasLeftChild():
-            current = current.leftChild
-        return current
-
-    def _splice(self):
-        if self.isLeaf():
-            if self.isLeftChild():
-                self.parent.leftChild = None
-            else:
-                self.parent.rightChild = None
-        elif self.hasAnyChildren():
-            if self.hasLeftChild():
-                if self.isLeftChild():
-                    self.parent.leftChild = self.leftChild
-                else:
-                    self.parent.rightChild = self.leftChild
-                self.leftChild.parent = self.parent
-            else:
-                if self.isLeftChild():
-                    self.parent.leftChild = self.rightChild
-                else:
-                    self.parent.rightChild = self.rightChild
-                self.rightChild.parent = self.parent
     # end of deleting section
 
     def _get(self, key, current):
@@ -166,6 +127,20 @@ class Binary_search_tree:
                 currentNode.rightChild = Tree_node(key, val, parent=currentNode)
         else:
             currentNode.replaceNodeData(key, val, lc=currentNode.leftChild, rc=currentNode.rightChild)
+
+    def __repr__(self):
+        cur = self.root
+        s = []
+
+        def helper(current):
+            if current:
+                helper(current.leftChild)
+                s.append(("key: " + str(current.key), "val: " + str(current.payload) + " "))
+                helper(current.rightChild)
+
+        helper(cur)
+        s = "".join(str(e) for e in s)
+        return "sorted tree: \n" + s
 
 
 class Tree_node:
@@ -211,6 +186,49 @@ class Tree_node:
         if self.hasRightChild():
             self.rightChild.parent = self
 
+    # deletion part beginning
+    def _find_next(self):
+        res = None
+        if self.hasRightChild():
+            res = self.rightChild._find_min()
+        else:
+            if self.parent:
+                if self.isLeftChild():
+                    res = self.parent
+                else:
+                    self.parent.rightChild = None
+                    res = self.parent._find_next()
+                    self.parent.rightChild = self
+        return res
+
+    def _find_min(self):
+        current = self
+        while current.hasLeftChild():
+            current = current.leftChild
+        return current
+
+    def _splice(self):
+        if self.isLeaf():
+            if self.isLeftChild():
+                self.parent.leftChild = None
+            else:
+                self.parent.rightChild = None
+        elif self.hasAnyChildren():
+            if self.hasLeftChild():
+                if self.isLeftChild():
+                    self.parent.leftChild = self.leftChild
+                else:
+                    self.parent.rightChild = self.leftChild
+                self.leftChild.parent = self.parent
+            else:
+                if self.isLeftChild():
+                    self.parent.leftChild = self.rightChild
+                else:
+                    self.parent.rightChild = self.rightChild
+                self.rightChild.parent = self.parent
+
+    # end of deleting section
+
     def __iter__(self):
         if self:
             if self.hasLeftChild():
@@ -222,14 +240,15 @@ class Tree_node:
                     yield item
 
 
-
 def inorder_traversal(tree):
     cur = tree.root
+
     def helper(current):
         if current:
             helper(current.leftChild)
             print(current.key, current.payload)
             helper(current.rightChild)
+
     return helper(cur)
 
 
@@ -240,10 +259,11 @@ def make_min_from_array(tree, xs):
         right = xs[m:]
         tree.put(xs[m], 0)
         make_min_from_array(tree, left)
-        make_min_from_array(tree,right)
+        make_min_from_array(tree, right)
 
     else:
         tree.put(xs[0], 1)
+
 
 def height(tree):
     if tree:
@@ -256,6 +276,7 @@ def height(tree):
     else:
         return 0
 
+
 def height_node(tree_node):
     if not tree_node:
         return 0
@@ -267,8 +288,10 @@ def height_node(tree_node):
         else:
             return r_height + 1
 
+
 def is_balanced(tree_node):
     return abs(height_node(tree_node.root.leftChild) - height_node(tree_node.root.rightChild)) <= 1
+
 
 def maxdepth(treenode):
     if treenode:
@@ -287,11 +310,13 @@ def mindepth(treenode):
 def is_balanced2(treenode):
     return maxdepth(treenode.root) - mindepth(treenode.root) <= 1
 
+
 def top_height(tree_node):
     if not tree_node:
         return 0
     else:
         return 1 + top_height(tree_node.parent)
+
 
 def make_list(tree_node):
     """ make a list from a bin tree"""
@@ -300,15 +325,45 @@ def make_list(tree_node):
     else:
         size = height_node(tree_node.root)
         l1 = [[] for x in range(size)]
+
         def travel_list(current):
-                if current:
-                    travel_list(current.leftChild)
-                    l1[top_height(current) - 1].append(current.key)
-                    travel_list(current.rightChild)
-                return l1
+            if current:
+                travel_list(current.leftChild)
+                l1[top_height(current) - 1].append(current.key)
+                travel_list(current.rightChild)
+            return l1
+
         l = travel_list(tree_node.root)
         for x in range(len(l)):
             print(l[x])
 
+# helpers to tests
+def swap(alist, i, j):
+    """swaps input lists i, j elements"""
+    alist[i], alist[j] = alist[j], alist[i]
+
+
+def shuffle(data):
+    """randomly shuffles element in the input data"""
+    n = len(data)
+    for token in range(n - 1):
+        swap(data, token, random.randrange(token, n))
+
+
+def main():
+    tree = Binary_search_tree()
+    ar = []
+    for i in range(10000):
+        ar.append(i)
+    shuffle(ar)
+    for i in range(10000):
+        tree.put(ar[i], "B")
+    for k in ar:
+        tree.delete(k)
+    print(tree)
+
+
+if __name__ == '__main__':
+    main()
 
 
